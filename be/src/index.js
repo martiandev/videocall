@@ -8,8 +8,8 @@ const {PORT} = process.env ;
 console.log(process.env.NODE_ENV)
 let server;
 
-server = app.listen(PORT, ()=>{
-    logger.info(`Server is listening at ${PORT}`);
+server = app.listen( ()=>{
+    // logger.info(`Server is listening at ${PORT}`);
     console.log(`process id`,process.pid);
     // throw new Error("error");
 });
