@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import helmet from 'helmet';
@@ -14,13 +15,6 @@ import routes from './routes/index.js'
 dotenv.config();
 const app = express();
 
-//api v1 routes
-app.use("/api/v1",routes);
-
-app.get('/',(req,res)=>{
-    // res.send("hello");
-    throw createHttpError.BadRequest("error po");
-});
 
 //Morgan
 if(process.env.NODE_ENV!=="production"){
@@ -42,9 +36,16 @@ app.use(mongoSanitize());
 //enable cookie parser
 app.use(cookieParser());
 
+//json parser
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+app.use(urlencodedParser);
+app.use(jsonParser);
 //gzip compression
 app.use(compression());
-
+//api v1 routes
+app.use("/api/v1",routes);
 
 //file upload
 app.use(fileUpload({
@@ -72,5 +73,11 @@ app.use(async(req,res,next)=>{
     next(createHttpError.NotFound('This route does not exist.'));
 });
 
+
+
+// app.get('/',(req,res)=>{
+//     // res.send("hello");
+//     throw createHttpError.BadRequest("error po");
+// });
 
 export default app;
